@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BsBomber.Contracts", "BsBomber.Contracts\BsBomber.Contracts.csproj", "{91F68009-225C-16B2-9D32-C6CEA8AF1B41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BsBomber.Core", "BsBomber.Core\BsBomber.Core.csproj", "{79E538E9-8E3F-711D-50A0-16D120B212A0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{91F68009-225C-16B2-9D32-C6CEA8AF1B41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91F68009-225C-16B2-9D32-C6CEA8AF1B41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91F68009-225C-16B2-9D32-C6CEA8AF1B41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91F68009-225C-16B2-9D32-C6CEA8AF1B41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79E538E9-8E3F-711D-50A0-16D120B212A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79E538E9-8E3F-711D-50A0-16D120B212A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79E538E9-8E3F-711D-50A0-16D120B212A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79E538E9-8E3F-711D-50A0-16D120B212A0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4103EC2E-4502-4C1E-AD66-0D066374DCE5}
+	EndGlobalSection
+EndGlobal
