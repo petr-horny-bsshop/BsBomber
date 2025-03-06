@@ -1,0 +1,57 @@
+﻿@using BsBomber.Core.Model
+@using BsBomber.Contracts
+<div>
+    <svg width="@(Board.Width*CellOuterSize)" height="@(Board.Height*CellOuterSize)">
+        @for (var y = 0; y < Board.Height; y++)
+        {
+            for (var x = 0; x < Board.Width; x++)
+            {
+                var coordinate = new CoordinateDto(x, y);
+                <rect @key="@($"{x}_{y}")" x="@GetSvgX(coordinate)" y="@GetSvgY(coordinate)" width="@CellSize" height="@CellSize" fill="#c0c0c0"></rect>
+            }
+        }
+    
+        @* Jídlo *@
+        @foreach (var food in Board.Food)
+        {
+            <circle class="food" cx="@(GetSvgX(food)+CellSize/2)" cy="@(GetSvgY(food)+CellSize/2)" r="@(CellSize/2)" fill="green"></circle>
+        }
+        
+        @* Překážky *@
+        @foreach (var obstacle in Board.Obstacles)
+        {
+            <circle class="obstacle" cx="@(GetSvgX(obstacle)+CellSize/2)" cy="@(GetSvgY(obstacle)+CellSize/2)" r="@(CellSize/2)" fill="black"></circle>
+        }
+
+        @* Bombeři *@
+        @foreach (var bomber in Board.Bombers.OrderBy(s => s.Alive ? 1 : 0))
+        {
+            var css = bomber.Alive ? "alive" : "dead";
+            <circle class="bomber head @css" cx="@(GetSvgX(bomber.Position)+CellSize/2)" cy="@(GetSvgY(bomber.Position)+CellSize/2)" r="@(CellSize/2)" fill="@bomber.Color"></circle>
+        }
+
+    </svg>
+</div>
+
+
+@code
+{
+    private const int CellSize = 40;
+    private const int CellPadding = 1;
+    private const int CellOuterSize = CellSize + CellPadding;
+
+    [Parameter, EditorRequired]
+    public required BoardDto Board { get; set; }
+
+    private int GetSvgX(CoordinateDto coordinate)
+    {
+        var result = coordinate.X * CellOuterSize;
+        return result;
+    }
+
+    private int GetSvgY(CoordinateDto coordinate)
+    {
+        var result = (Board.Height-1) * CellOuterSize - coordinate.Y * CellOuterSize;
+        return result;
+    }
+}

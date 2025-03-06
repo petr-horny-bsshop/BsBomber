@@ -1,0 +1,40 @@
+﻿@using BsBomber.Core.Model
+
+<RadzenCheckBoxList @bind-Value="@_selectedBombers" @bind-Value:after="OnSelectedBombersChanged" TValue="BomberDefinition" Orientation="Orientation.Vertical" class="mb-5">
+    <Items>
+        @foreach (var bomber in _bombers)
+        {
+            <RadzenCheckBoxListItem Text="@($"{bomber.Name} ({bomber.Url})")" Value="bomber" />
+        }
+    </Items>
+</RadzenCheckBoxList>
+<em>Hadi se definují v souboru bombers.json</em>
+
+@code {
+    private IEnumerable<BomberDefinition> _selectedBombers = default!;
+    private IReadOnlyList<BomberDefinition> _bombers = default!;
+
+    [Parameter]
+    public required IReadOnlyList<BomberDefinition> SelectedBombers { get; set; }
+
+    [Parameter]
+    public EventCallback<IReadOnlyList<BomberDefinition>> SelectedBombersChanged { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _bombers = Bombers.LoadBomberDefinitions();
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        _selectedBombers = SelectedBombers;
+    }
+
+    private async Task OnSelectedBombersChanged()
+    {
+        await SelectedBombersChanged.InvokeAsync(_selectedBombers.ToArray());
+    }
+    
+}

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BsBomber.Contracts", "BsBom
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BsBomber.Core", "BsBomber.Core\BsBomber.Core.csproj", "{79E538E9-8E3F-711D-50A0-16D120B212A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BsBomber.Rcl", "BsBomber.Rcl\BsBomber.Rcl.csproj", "{BACAF926-5E41-F9CF-FED9-8CA94D72E4E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{79E538E9-8E3F-711D-50A0-16D120B212A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79E538E9-8E3F-711D-50A0-16D120B212A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79E538E9-8E3F-711D-50A0-16D120B212A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BACAF926-5E41-F9CF-FED9-8CA94D72E4E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BACAF926-5E41-F9CF-FED9-8CA94D72E4E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BACAF926-5E41-F9CF-FED9-8CA94D72E4E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BACAF926-5E41-F9CF-FED9-8CA94D72E4E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

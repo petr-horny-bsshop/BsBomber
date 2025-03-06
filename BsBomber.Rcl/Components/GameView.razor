@@ -1,0 +1,63 @@
+﻿@using BsBomber.Core
+@using BsBomber.Core.Model
+@using BsBomber.Contracts
+@using System.Text.Json
+@inject DialogService DialogService
+
+@if (_game == null)
+{
+    <RadzenPanel AllowCollapse Text="Výběr kola">
+        <GameChooser @bind-Value="_selectedGameSettings"/>
+    </RadzenPanel>
+    <br/>
+    <RadzenPanel AllowCollapse Text="Výběr hadů">
+        <BombersChooser @bind-SelectedBombers="_selectedBombers"/>
+    </RadzenPanel>
+
+    <br/>
+}
+@if (_selectedGameSettings == null || _selectedBombers.Count == 0)
+{
+    return;
+}
+
+@if (_game == null)
+{
+    <RadzenButton Click="CreateClicked" Text="Vytvořit hru" />
+}
+else if (_initializingGame)
+{
+    <text>Provádí se inicializace hry...</text>
+}
+else
+{
+    <GameControl Game="_game" NewGame="NewGame" />
+}
+                                              
+@code
+{
+    private IReadOnlyList<BomberDefinition> _selectedBombers = Array.Empty<BomberDefinition>();
+    private GameSettings? _selectedGameSettings;
+    private Game? _game;
+    private bool _initializingGame;
+
+    private async Task CreateClicked()
+    {
+        if (_selectedGameSettings == null)
+        {
+            await DialogService.Alert("Vyberte nastavení hry");
+            return;
+        }
+
+        _game = new Game(_selectedGameSettings, _selectedBombers);
+        _initializingGame = true;
+        await _game.InitAsync();
+        _initializingGame = false;
+        StateHasChanged();
+    }
+
+    private void NewGame()
+    {
+        _game = null;
+    }
+}

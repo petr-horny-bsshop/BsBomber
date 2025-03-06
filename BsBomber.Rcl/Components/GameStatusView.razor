@@ -1,0 +1,62 @@
+﻿@using BsBomber.Contracts
+@using BsBomber.Core.Model
+
+Iterace: @Game.Iteration
+<br />
+
+@*<div style="display: grid; grid-template-columns: auto auto auto;">
+    @foreach()
+    <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Style="@($"color:{bomber.Color}")">@(bomber.Name)</RadzenText>
+    <div>Délka: @bomber.Length</div>
+</div>*@
+
+@for (var bomberIndex=0; bomberIndex<_bombers.Count; bomberIndex++)
+{
+    var bomber = _bombers[bomberIndex];
+    var scoreIndex = bomberIndex+1;
+    <RadzenCard @key="bomber.Id" Style="padding: 0; margin: 5px;">
+        <RadzenRow Gap="0" Style="@(bomber.Alive ? "" : "opacity:0.5")">
+            <RadzenColumn Size="1" Class="rz-p-4">
+                <RadzenText TextStyle="TextStyle.H2" TagName="TagName.H2" Style="@($"color:{bomber.Color}")">@(scoreIndex).</RadzenText>
+            </RadzenColumn>
+            <RadzenColumn Size="6" Class="rz-p-4">
+                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Style="@($"color:{bomber.Color}")">@(bomber.Name)</RadzenText>
+                <br />
+                @bomber.Url
+            </RadzenColumn>
+            <RadzenColumn Size="3" Class="rz-p-4">
+                Energie: @bomber.Energy
+            </RadzenColumn>
+            <RadzenColumn Size="2" Class="rz-p-4">
+                Latence: @bomber.Latency ms
+            </RadzenColumn>
+        </RadzenRow>
+        @if (!bomber.Alive)
+        {
+            <RadzenRow Gap="0">
+                <RadzenColumn Size="12" Class="rz-p-4">
+                    Smrt v @bomber.DeathIteration. iteraci
+                </RadzenColumn>
+            </RadzenRow>
+            <RadzenRow Gap="0">
+                <RadzenColumn Size="12" Class="rz-p-4" >
+                    Příčina smrti: <span style="color:red;">@bomber.DeathCause</span>
+                </RadzenColumn>
+            </RadzenRow>
+        }
+    </RadzenCard>
+}
+
+@code {
+    private IReadOnlyList<BomberDto> _bombers = default!;
+
+    [Parameter, EditorRequired]
+    public required GameDto Game { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        _bombers = Game.Board.Bombers.OrderByDescending(s => s.DeathIteration.GetValueOrDefault(int.MaxValue)).ThenByDescending(s => s.Alive).ToArray();
+    }
+
+}
