@@ -1,0 +1,36 @@
+using BsBomber.Contracts;
+using BsBomber.Core.BomberEngines;
+
+namespace BsBomber.Server;
+
+internal class BomberServer
+{
+    private SimpleBomberEngine _bomberEngine;
+
+    private BomberServer(int id, WebApplication app)
+    {
+        app.MapGet($"/bomber/{id}", () =>
+        {
+            return Results.Ok("ok");
+        }); 
+
+        app.MapPost($"/bomber/{id}/init", async (GameDto game) =>
+        {
+            _bomberEngine = new SimpleBomberEngine();
+            await _bomberEngine.InitAsync(game, CancellationToken.None);
+            return Results.Ok();
+        }); 
+
+        app.MapPost($"/bomber/{id}/move", async (GameDto game) =>
+        {
+            var result = await _bomberEngine.MoveAsync(game, CancellationToken.None);
+            return Results.Ok(result);
+        }); 
+    }
+
+    public static BomberServer Map(int id, WebApplication app)
+    {
+        var result = new BomberServer(id, app);
+        return result;
+    }
+}

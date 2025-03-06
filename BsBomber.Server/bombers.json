@@ -1,0 +1,10 @@
+[
+  {
+    "name": "Ukázkový bomber #1",
+    "url": "http://localhost:6001/bomber/1"
+  },
+  {
+    "name": "Ukázkový bomber #2",
+    "url": "http://localhost:6001/bomber/0"
+  }  
+]
