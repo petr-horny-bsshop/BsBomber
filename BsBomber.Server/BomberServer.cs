@@ -1,11 +1,11 @@
 using BsBomber.Contracts;
-using BsBomber.Core.BomberEngines;
+using BsBomber.Core.Model;
 
 namespace BsBomber.Server;
 
 internal class BomberServer
 {
-    private SimpleBomberEngine _bomberEngine;
+    private IBomberEngine _bomberEngine;
 
     private BomberServer(int id, WebApplication app)
     {
@@ -16,7 +16,7 @@ internal class BomberServer
 
         app.MapPost($"/bomber/{id}/init", async (GameDto game) =>
         {
-            _bomberEngine = new SimpleBomberEngine();
+            _bomberEngine = new AiBomberEngine();
             await _bomberEngine.InitAsync(game, CancellationToken.None);
             return Results.Ok();
         }); 
@@ -24,6 +24,7 @@ internal class BomberServer
         app.MapPost($"/bomber/{id}/move", async (GameDto game) =>
         {
             var result = await _bomberEngine.MoveAsync(game, CancellationToken.None);
+            // var json = JsonSerializer.Serialize(game);
             return Results.Ok(result);
         }); 
     }

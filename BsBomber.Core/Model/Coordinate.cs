@@ -43,8 +43,15 @@ public class Coordinate
                 return new Coordinate(X, Y + 1);
             case BomberAction.GoDown:
                 return new Coordinate(X, Y - 1);
-            default:
-                throw new ArgumentOutOfRangeException(nameof(bomberAction), bomberAction, null);
+            case BomberAction.PutBombRight:
+                return new Coordinate(X + 1, Y);
+            case BomberAction.PutBombLeft:
+                return new Coordinate(X - 1, Y);
+            case BomberAction.PutBombUp:
+                return new Coordinate(X, Y + 1);
+            case BomberAction.PutBombDown:
+                return new Coordinate(X, Y - 1);
+            default: throw new ArgumentOutOfRangeException(nameof(bomberAction), bomberAction, null);
         }
     }
 

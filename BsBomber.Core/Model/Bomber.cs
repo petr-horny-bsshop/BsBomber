@@ -9,8 +9,6 @@ namespace BsBomber.Core.Model;
 public class Bomber
 {
     private readonly IBomberEngine _engine;
-    private readonly Queue<Coordinate> _body = new Queue<Coordinate>();
-    private int _foodToDigest = 0;
     private TimeSpan _timeSpent;
     private int _requests;
 
@@ -109,28 +107,49 @@ public class Bomber
     public async Task MoveAsync(Game game, CancellationToken cancellationToken)
     {
         var gameDto = game.GetDto(this);
+
         var response = await _engine.MoveAsync(gameDto, cancellationToken);
 
-        var hasBody = _body.Count > 0;
+        // Jedná se o pohyb
+        if (response.BomberAction.IsMovement())
+        {
+            var newPosition = Position.Move(response.BomberAction);
 
-        if (hasBody)
-        {
-            if (_foodToDigest > 0) _foodToDigest--;
-            else _body.Dequeue();
-            _body.Enqueue(Position);
+            // Na nové pozici je překážka, takže se nikam nejde
+            if (game.Board.Obstacles.Any(o => o == newPosition)) return;
+
+            // Na nové pozici je jiný hráč, takže se nikam nejde
+            if (game.Board.AliveBombers.Any(b => b.Position == newPosition)) return;
+
+            // Na nové pozici je bomba, takže se nikam nejde
+            if (game.Board.Bombs.Any(b => b.Position == newPosition)) return;
+
+            Position = newPosition;
+
+            Energy--;
         }
-        else
+        else if (response.BomberAction.IsBombPlacing())
         {
-            if (_foodToDigest > 0)
+            var newPosition = Position.Move(response.BomberAction);
+
+            // Na nové pozici je překážka, takže se nic pokládat nebude
+            if (game.Board.Obstacles.Any(o => o == newPosition)) return;
+
+            // Na nové pozici je jiný hráč, takže se nic pokládat nebude
+            if (game.Board.AliveBombers.Any(b => b.Position == newPosition)) return;
+
+            // Na nové pozici je bomba, takže se nic pokládat nebude
+            if (game.Board.Bombs.Any(b => b.Position == newPosition)) return;
+            
+            var bomb = new Bomb
             {
-                _foodToDigest--;
-                _body.Enqueue(Position);
-            }
+                BomberId = Id,
+                Position = newPosition,
+                Timer = response.Argument.GetValueOrDefault(3)
+            };
+            game.Board.Bombs.AddLast(bomb);
         }
-
-        Position = Position.Move(response.BomberAction);
-
-        Energy--;
+        
     }
 
     /// <summary>
@@ -150,7 +169,6 @@ public class Bomber
     /// <param name="energy">Celková energie získaná snědením daného počtu jídla.</param>
     public void Eat(int count, int energy)
     {
-        _foodToDigest += count;
         Energy += energy;
     }
 

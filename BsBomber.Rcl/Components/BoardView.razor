@@ -7,20 +7,32 @@
             for (var x = 0; x < Board.Width; x++)
             {
                 var coordinate = new CoordinateDto(x, y);
-                <rect @key="@($"{x}_{y}")" x="@GetSvgX(coordinate)" y="@GetSvgY(coordinate)" width="@CellSize" height="@CellSize" fill="#c0c0c0"></rect>
+                <rect @key="@($"board_{x}_{y}")" x="@GetSvgX(coordinate)" y="@GetSvgY(coordinate)" width="@CellSize" height="@CellSize" fill="#c0c0c0"></rect>
             }
         }
     
+        @* Překážky *@
+        @foreach (var obstacle in Board.Obstacles)
+        {
+            <rect @key="@($"obst_{obstacle.X}_{obstacle.Y}")" class="obstacle" x="@GetSvgX(obstacle)" y="@GetSvgY(obstacle)" width="@CellSize" height="@CellSize" fill="gray"></rect>
+        }
+
         @* Jídlo *@
         @foreach (var food in Board.Food)
         {
             <circle class="food" cx="@(GetSvgX(food)+CellSize/2)" cy="@(GetSvgY(food)+CellSize/2)" r="@(CellSize/2)" fill="green"></circle>
         }
         
-        @* Překážky *@
-        @foreach (var obstacle in Board.Obstacles)
+        @* Bomby *@
+        @foreach (var bomb in Board.Bombs)
         {
-            <circle class="obstacle" cx="@(GetSvgX(obstacle)+CellSize/2)" cy="@(GetSvgY(obstacle)+CellSize/2)" r="@(CellSize/2)" fill="black"></circle>
+            <circle class="fire" cx="@(GetSvgX(bomb.Position)+CellSize/2)" cy="@(GetSvgY(bomb.Position)+CellSize/2)" r="@(CellSize/2)" fill="black"></circle>
+        }
+
+        @* Exploze *@
+        @foreach (var fire in Board.Fires)
+        {
+            <circle class="fire" cx="@(GetSvgX(fire.Position)+CellSize/2)" cy="@(GetSvgY(fire.Position)+CellSize/2)" r="@(CellSize/2)" fill="orange"></circle>
         }
 
         @* Bombeři *@

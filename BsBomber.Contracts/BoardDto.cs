@@ -30,12 +30,18 @@ public record BoardDto
     /// </summary>
     [JsonPropertyName("obstacles")]
     public required CoordinateDto[] Obstacles { get; init; }
-    /*
+    
     /// <summary>
-    /// Informace o políčkách s nepřáteli.
+    /// Informace o políčkách s ohněm (po detonaci bomby.).
     /// </summary>
-    [JsonPropertyName("enemies")]
-    public required CoordinateDto[] Enemies { get; init; }*/
+    [JsonPropertyName("fire")]
+    public required FireDto[] Fires { get; init; }
+
+    /// <summary>
+    /// Informace o bombách.
+    /// </summary>
+    [JsonPropertyName("bombs")]
+    public required BombDto[] Bombs { get; init; }
 
     /// <summary>
     /// Informace o všech hráčích na hrací ploše.

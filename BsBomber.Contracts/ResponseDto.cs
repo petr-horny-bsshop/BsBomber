@@ -1,13 +1,22 @@
-﻿namespace BsBomber.Contracts
+﻿using System.Text.Json.Serialization;
+
+namespace BsBomber.Contracts;
+
+/// <summary>
+/// Odpověď hráče v aktuální iteraci.
+/// </summary>
+public record ResponseDto
 {
     /// <summary>
-    /// Odpověď hráče v aktuální iteraci.
+    /// Akce, kterou chce hráč provést.
     /// </summary>
-    public record ResponseDto
-    {
-        /// <summary>
-        /// Akce, kterou chce hráč provést.
-        /// </summary>
-        public BomberAction BomberAction { get; set; }
-    }
+    [JsonPropertyName("bomberAction")]
+    public BomberAction BomberAction { get; set; }
+
+    /// <summary>
+    /// Argument akce.
+    /// V případě položení bomby je to doba do výbuchu bomby.
+    /// </summary>
+    [JsonPropertyName("argument")]
+    public int? Argument { get; set; }
 }

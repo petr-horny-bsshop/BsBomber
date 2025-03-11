@@ -32,6 +32,16 @@ public class Board
     public IList<Coordinate> Obstacles { get; } = new List<Coordinate>();
 
     /// <summary>
+    /// Seznam pozic s ohněm (po detonaci bomby) na hrací ploše.
+    /// </summary>
+    public IList<Fire> Fires { get; } = new List<Fire>();
+
+    /// <summary>
+    /// Seznam všech bomb na hrací ploše.
+    /// </summary>
+    public LinkedList<Bomb> Bombs { get; } = new();
+
+    /// <summary>
     /// Seznam všech hráčů na hrací ploše.
     /// </summary>
     public IReadOnlyCollection<Bomber> Bombers => _bombers;
@@ -73,6 +83,8 @@ public class Board
         {
             Food = Food.GetDto(),
             Obstacles = Obstacles.GetDto(),
+            Bombs = Bombs.Select(b => b.GetDto()).ToArray(),
+            Fires = Fires.Select(f =>f .GetDto()).ToArray(),
             Height = Height,
             Width = Width,
             Bombers = Bombers.Select(s => s.GetDto()).ToArray()
@@ -92,14 +104,11 @@ public class Board
     }
 
     /// <summary>
-    /// Přidá překážku na náhodně vybrané volné pole.
+    /// Přidá překážku na zadanou pozici.
     /// </summary>
-    public void AddObstacle()
+    public void AddObstacle(Coordinate coordinate)
     {
-        if (TryGetFreeCell(out var coordinate))
-        {
-            Obstacles.Add(coordinate);
-        }
+        Obstacles.Add(coordinate);
     }
 
     private Coordinate GetFreeCell()

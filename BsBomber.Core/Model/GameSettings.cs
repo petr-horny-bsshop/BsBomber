@@ -43,12 +43,6 @@ public record GameSettings
     public required double FoodProbability { get; init; }
 
     /// <summary>
-    /// Pravděpodobnost, že se v každé iteraci na volném políčku vytvoří překážka.
-    /// </summary>
-    [JsonPropertyName("obstacleProbability")]
-    public required double ObstacleProbability { get; init; }
-
-    /// <summary>
     /// Průměrný dovolený timeout v milisekundách.
     /// Pokud je NULL použije se výchozí hodnota <see cref="AVERAGE_TIMEOUT"/>.
     /// </summary>
@@ -91,7 +85,6 @@ public record GameSettings
             BoardWidth = 12,
             BoardHeight = 12,
             FoodProbability = 0.3,
-            ObstacleProbability = 0.0,
             MaximumIterations = 250,
             StartingEnergy = 100,
             FoodEnergy = 10,
@@ -103,7 +96,6 @@ public record GameSettings
         var secondRound = firstRound with
         {
             Name = "2. kolo",
-            ObstacleProbability = 0.1,
             FoodProbability = 0.1,
             MaximumIterations = 500,
         };
@@ -111,7 +103,6 @@ public record GameSettings
         var thirdRound = secondRound with
         {
             Name = "3. kolo",
-            ObstacleProbability = 0.1,
             MaximumIterations = 5000,
         };
 
