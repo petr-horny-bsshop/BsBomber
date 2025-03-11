@@ -1,4 +1,4 @@
-﻿using BsBomber.Contracts;
+using BsBomber.Contracts;
 using BsBomber.Core.Model;
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
 
@@ -26,7 +26,7 @@ public class AiBomberEngine : IBomberEngine
         var otherPlayers = game.Board.Bombers.Where(b => b.Id != player.Id && b.Alive).ToList();
 
         // Zjistíme, kde je jídlo
-        var food = board.Food.ToList();
+        var food = board.Mines.ToList();
 
         // Zjistíme pozice ohně (místo, kde hrozí výbuch)
         var fires = board.Fires.Select(f => f.Position).ToList();
@@ -35,7 +35,7 @@ public class AiBomberEngine : IBomberEngine
         var foodInBombRange = food.Where(f => IsInBombRange(player.Position, f)).ToList();
         if (foodInBombRange.Any())
         {
-            return new ResponseDto { BomberAction = BomberAction.PutBombDown, Argument = BombTimer };
+            return new ResponseDto { BomberAction = BomberAction.PutBomb, Argument = BombTimer };
         }
 
         // Zkusíme najít nejlepší pohyb k jídlu, pokud není možnost sbírat potravu pomocí bomby
@@ -50,7 +50,7 @@ public class AiBomberEngine : IBomberEngine
         // Pokud je dostatečná bezpečnostní vzdálenost od všech soupeřů a nejsou ohně poblíž, můžeme položit bombu
         if (CanPlaceBomb(player, fires))
         {
-            return new ResponseDto { BomberAction = BomberAction.PutBombDown, Argument = BombTimer };
+            return new ResponseDto { BomberAction = BomberAction.PutBomb, Argument = BombTimer };
         }
 
         // Pokud ne, jednoduše nic neuděláme

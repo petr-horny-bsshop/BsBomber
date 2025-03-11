@@ -1,4 +1,4 @@
-﻿@page "/Documentation"
+@page "/Documentation"
 <h1>Dokumentace</h1>
 <h2>Základní princip hry</h2>
 <p>
@@ -97,87 +97,59 @@
 <code>
 {
   "board": {
-    "height": 12,
-    "width": 12,
-    "food": [
+    "height": 11,
+    "width": 11,
+    "mines": [
       {
-        "x": 9,
-        "y": 11
+        "x": 8,
+        "y": 10
       },
       {
-        "x": 11,
-        "y": 9
+        "x": 5,
+        "y": 2
+      },
+      {
+        "x": 3,
+        "y": 1
       }
     ],
-    "obstacles": [],
+    "fire": [],
+    "bombs": [],
     "bombers": [
       {
-        "id": "f4a8d523-4057-48a7-b1dd-c827b4dbc82f",
-        "name": "BsBomber0",
-        "url": "http://localhost:6001/bomber/0/",
-        "head": {
-          "x": 7,
-          "y": 6
+        "id": "3d25ffd9-7adf-4e3e-be58-ad72f7da9af0",
+        "name": "Ukázkový bomber #1",
+        "url": "http://localhost:6001/bomber/1",
+        "position": {
+          "x": 5,
+          "y": 9
         },
-        "body": [],
-        "length": 1,
-        "energy": 78,
+        "score": 0,
         "alive": true,
         "color": "#ff0000",
-        "latency": 24,
-        "deathCause": null,
-        "deathIteration": null
-      },
-      {
-        "id": "4ac4bec8-ffb1-4877-9f05-8b53671bea17",
-        "name": "BsBomber1",
-        "url": "http://localhost:6001/bomber/1/",
-        "head": {
-          "x": 7,
-          "y": 2
-        },
-        "body": [
-          {
-            "x": 4,
-            "y": 2
-          },
-          {
-            "x": 5,
-            "y": 2
-          },
-          {
-            "x": 6,
-            "y": 2
-          }
-        ],
-        "length": 4,
-        "energy": 108,
-        "alive": true,
-        "color": "#00ff00",
-        "latency": 28,
+        "latency": 1940,
         "deathCause": null,
         "deathIteration": null
       }
     ],
-    "you" : {
-        "id": "f4a8d523-4057-48a7-b1dd-c827b4dbc82f",
-        "name": "BsBomber0",
-        "url": "http://localhost:6001/bomber/0/",
-        "head": {
-          "x": 7,
-          "y": 6
-        },
-        "body": [],
-        "length": 1,
-        "energy": 78,
-        "alive": true,
-        "color": "#ff0000",
-        "latency": 24,
-        "deathCause": null,
-        "deathIteration": null
-      },
+    "maximumFireIntensity": 3
   },
-  "iteration": 22
+  "you": {
+    "id": "3d25ffd9-7adf-4e3e-be58-ad72f7da9af0",
+    "name": "Ukázkový bomber #1",
+    "url": "http://localhost:6001/bomber/1",
+    "position": {
+      "x": 5,
+      "y": 9
+    },
+    "score": 0,
+    "alive": true,
+    "color": "#ff0000",
+    "latency": 1940,
+    "deathCause": null,
+    "deathIteration": null
+  },
+  "iteration": 3
 }
 </code>
 </pre>
@@ -187,7 +159,14 @@
 <pre>
 <code>
 {
-    "direction":"Down"
+  "bomberAction": "PutBomb",
+  "argument": 2
+}
+</code>
+<code>
+{
+  "bomberAction": "GoDown",
+  "argument": null
 }
 </code>
 </pre>

@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using BsBomber.Contracts;
 
 namespace BsBomber.Core.Model;
@@ -24,12 +24,7 @@ public class Board
     /// <summary>
     /// Seznam pozic s potravou na hrací ploše.
     /// </summary>
-    public IList<Coordinate> Food { get; } = new List<Coordinate>();
-
-    /// <summary>
-    /// Seznam pozic s překážkami na hrací ploše.
-    /// </summary>
-    public IList<Coordinate> Obstacles { get; } = new List<Coordinate>();
+    public IList<Mine> Mines { get; } = new List<Mine>();
 
     /// <summary>
     /// Seznam pozic s ohněm (po detonaci bomby) na hrací ploše.
@@ -64,12 +59,11 @@ public class Board
     /// Přidá hráče na hrací plochu.
     /// </summary>
     /// <param name="bomberEngine">Engine hráče.</param>
-    /// <param name="energy">Počáteční energie.</param>
     /// <param name="name">Název hráče.</param>
     /// <param name="color">Barva  hráče.</param>
-    public Bomber AddBomber(IBomberEngine bomberEngine, int energy, string name, string color)
+    public Bomber AddBomber(IBomberEngine bomberEngine, string name, string color)
     {
-        var bomber = new Bomber(GetFreeCell(), energy, bomberEngine, name, color);
+        var bomber = new Bomber(GetFreeCell(), bomberEngine, name, color);
         _bombers.Add(bomber);
         return bomber;
     }
@@ -77,17 +71,17 @@ public class Board
     /// <summary>
     /// Vrátí DTO s informacemi o hrací ploše.
     /// </summary>
-    public BoardDto GetDto()
+    public BoardDto GetDto(int maximumFireIntensity)
     {
         var dto = new BoardDto
         {
-            Food = Food.GetDto(),
-            Obstacles = Obstacles.GetDto(),
+            Mines = Mines.GetDto(),
             Bombs = Bombs.Select(b => b.GetDto()).ToArray(),
             Fires = Fires.Select(f =>f .GetDto()).ToArray(),
             Height = Height,
             Width = Width,
-            Bombers = Bombers.Select(s => s.GetDto()).ToArray()
+            Bombers = Bombers.Select(s => s.GetDto()).ToArray(),
+            MaximumFireIntensity = maximumFireIntensity
         };
         return dto;
     }
@@ -95,20 +89,15 @@ public class Board
     /// <summary>
     /// Přidá potravu na náhodně vybrané volné pole.
     /// </summary>
-    public void AddFood()
+    public bool TryAddMine()
     {
         if (TryGetFreeCell(out var coordinate))
         {
-            Food.Add(coordinate);
+            Mines.Add(new Mine(coordinate.X, coordinate.Y));
+            return true;
         }
-    }
 
-    /// <summary>
-    /// Přidá překážku na zadanou pozici.
-    /// </summary>
-    public void AddObstacle(Coordinate coordinate)
-    {
-        Obstacles.Add(coordinate);
+        return false;
     }
 
     private Coordinate GetFreeCell()
@@ -133,13 +122,10 @@ public class Board
 
     private bool IsCellFree(Coordinate coordinate)
     {
-        foreach (var bomber in AliveBombers)
-        {
-            if (bomber.Position == coordinate) return false;
-        }
-
-        if (Food.Any(f => f == coordinate)) return false;
-        if (Obstacles.Any(f => f == coordinate)) return false;
+        if (Mines.Any(f => f == coordinate)) return false;
+        if (AliveBombers.Any(f => f.Position == coordinate)) return false;
+        if (Bombs.Any(f => f.Position == coordinate)) return false;
+        if (Fires.Any(f => f.Position == coordinate)) return false;
         return true;
     }
 

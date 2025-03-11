@@ -3,34 +3,30 @@
     "name": "1. kolo",
     "boardWidth": 11,
     "boardHeight": 11,
-    "foodProbability": 0.3,    
+    "mineCount": 3,
     "averageTimeout": 1000,
     "maximumTimeout": 10000,
     "maximumIterations": 250,
-    "startingEnergy": 100,
-    "energyIncrease": 10
+    "fireIntensity": 3
   },
   {
     "name": "2. kolo",
     "boardWidth": 13,
     "boardHeight": 13,
-    "foodProbability": 0.1,    
+    "mineCount": 1,
     "averageTimeout": 1000,
     "maximumTimeout": 10000,
     "maximumIterations": 1000,
-    "startingEnergy": 100,
-    "energyIncrease": 10
+    "fireIntensity": 3
   },
   {
     "name": "3. kolo",
     "boardWidth": 25,
     "boardHeight": 25,
-    "foodProbability": 0.5,    
+    "mineCount": 5,
     "averageTimeout": 1000,
     "maximumTimeout": 10000,
     "maximumIterations": 5000,
-    "startingEnergy": 100,
-    "energyIncrease": 5
-
+    "fireIntensity": 3
   }
 ]

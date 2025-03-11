@@ -1,4 +1,5 @@
-﻿@using BsBomber.Core.Model
+@using System.Globalization
+@using BsBomber.Core.Model
 @using BsBomber.Contracts
 <div>
     <svg width="@(Board.Width*CellOuterSize)" height="@(Board.Height*CellOuterSize)">
@@ -10,19 +11,13 @@
                 <rect @key="@($"board_{x}_{y}")" x="@GetSvgX(coordinate)" y="@GetSvgY(coordinate)" width="@CellSize" height="@CellSize" fill="#c0c0c0"></rect>
             }
         }
-    
-        @* Překážky *@
-        @foreach (var obstacle in Board.Obstacles)
-        {
-            <rect @key="@($"obst_{obstacle.X}_{obstacle.Y}")" class="obstacle" x="@GetSvgX(obstacle)" y="@GetSvgY(obstacle)" width="@CellSize" height="@CellSize" fill="gray"></rect>
-        }
 
-        @* Jídlo *@
-        @foreach (var food in Board.Food)
+        @* Miny *@
+        @foreach (var food in Board.Mines)
         {
             <circle class="food" cx="@(GetSvgX(food)+CellSize/2)" cy="@(GetSvgY(food)+CellSize/2)" r="@(CellSize/2)" fill="green"></circle>
         }
-        
+
         @* Bomby *@
         @foreach (var bomb in Board.Bombs)
         {
@@ -32,7 +27,9 @@
         @* Exploze *@
         @foreach (var fire in Board.Fires)
         {
-            <circle class="fire" cx="@(GetSvgX(fire.Position)+CellSize/2)" cy="@(GetSvgY(fire.Position)+CellSize/2)" r="@(CellSize/2)" fill="orange"></circle>
+            var alpha = Math.Max(0, Math.Min(255, ((fire.Intensity + 1) * 255) / (Board.MaximumFireIntensity + 1)));
+            var color = $"rgba(255, 165, 0, {(alpha / 255.0).ToString(CultureInfo.InvariantCulture)})";
+            <circle class="fire" cx="@(GetSvgX(fire.Position) + CellSize / 2)" cy="@(GetSvgY(fire.Position) + CellSize / 2)" r="@(CellSize / 2)" fill="@color"></circle>
         }
 
         @* Bombeři *@
@@ -54,6 +51,9 @@
 
     [Parameter, EditorRequired]
     public required BoardDto Board { get; set; }
+
+    [Parameter, EditorRequired]
+    public required Game Game { get; set; }
 
     private int GetSvgX(CoordinateDto coordinate)
     {

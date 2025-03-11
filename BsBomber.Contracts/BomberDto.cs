@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace BsBomber.Contracts;
 
@@ -32,11 +32,10 @@ public record BomberDto
     public required CoordinateDto Position { get; init; }
 
     /// <summary>
-    /// Energie hráče.
-    /// Každým krokem se energie snižuje o 1.
+    /// Skóre hráče.
     /// </summary>
-    [JsonPropertyName("energy")]
-    public required int Energy { get; init; }
+    [JsonPropertyName("score")]
+    public required int Score { get; init; }
 
     /// <summary>
     /// Zda je hráč naživu.

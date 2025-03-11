@@ -1,4 +1,4 @@
-﻿using BsBomber.Contracts;
+using BsBomber.Contracts;
 
 namespace BsBomber.Core.Model;
 
@@ -7,7 +7,7 @@ static class EnemyHelper
     public static Coordinate Move(Game game, Coordinate enemyPosition)
     {
         var bombers = game.Board.AliveBombers.Select(b => b.Position).ToArray();
-        var obstacles = new HashSet<(int, int)>(game.Board.Obstacles.Select(o => (o.X, o.Y)));
+        var obstacles = new HashSet<Coordinate>(game.Board.Mines.Concat(game.Board.Bombs.Select(o => o.Position)));
 
         // Najdi nejbližší jídlo pomocí BFS
         var nextMove = FindBestMove(enemyPosition, bombers, obstacles, game.Board.Width, game.Board.Height);
@@ -16,7 +16,7 @@ static class EnemyHelper
         return newPosition;
     }
 
-    private static BomberAction FindBestMove(Coordinate start, IReadOnlyCollection<Coordinate> bombers, HashSet<(int, int)> obstacles, int width, int height)
+    private static BomberAction FindBestMove(Coordinate start, IReadOnlyCollection<Coordinate> bombers, HashSet<Coordinate> obstacles, int width, int height)
     {
         var directions = new (BomberAction Action, int DX, int DY)[]
         {
@@ -27,10 +27,10 @@ static class EnemyHelper
         };
 
         var queue = new Queue<(int X, int Y, List<BomberAction> Path)>();
-        var visited = new HashSet<(int, int)>();
+        var visited = new HashSet<Coordinate>();
 
         queue.Enqueue((start.X, start.Y, new List<BomberAction>()));
-        visited.Add((start.X, start.Y));
+        visited.Add(start);
 
         while (queue.Count > 0)
         {
@@ -46,12 +46,13 @@ static class EnemyHelper
             foreach (var (action, dx, dy) in directions)
             {
                 int newX = x + dx, newY = y + dy;
+                var newCoord = new Coordinate(newX, newY);
 
-                if (newX >= 0 && newX < width && newY >= 0 && newY < height && !obstacles.Contains((newX, newY)) && !visited.Contains((newX, newY)))
+                if (newX >= 0 && newX < width && newY >= 0 && newY < height && !obstacles.Contains(newCoord) && !visited.Contains(newCoord))
                 {
                     var newPath = new List<BomberAction>(path) { action };
                     queue.Enqueue((newX, newY, newPath));
-                    visited.Add((newX, newY));
+                    visited.Add(newCoord);
                 }
             }
         }

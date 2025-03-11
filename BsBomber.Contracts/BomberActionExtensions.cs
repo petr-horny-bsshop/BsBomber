@@ -1,4 +1,4 @@
-﻿namespace BsBomber.Contracts;
+namespace BsBomber.Contracts;
 
 /// <summary>
 /// Extension metody pro <see cref="BomberAction"/>.
@@ -22,10 +22,7 @@ public static class BomberActionExtensions
     /// </summary>
     public static bool IsBombPlacing(this BomberAction action) => action switch
     {
-        BomberAction.PutBombRight => true,
-        BomberAction.PutBombLeft => true,
-        BomberAction.PutBombUp => true,
-        BomberAction.PutBombDown => true,
+        BomberAction.PutBomb => true,
         _ => false
     };
 }

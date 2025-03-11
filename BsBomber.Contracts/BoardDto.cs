@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace BsBomber.Contracts;
 
@@ -20,19 +20,13 @@ public record BoardDto
     public required int Width { get; init; }
 
     /// <summary>
-    /// Informace o políčkách s jídlem.
+    /// Informace o políčkách s minou.
     /// </summary>
-    [JsonPropertyName("food")]
-    public required CoordinateDto[] Food { get; init; }
+    [JsonPropertyName("mines")]
+    public required CoordinateDto[] Mines { get; init; }
 
     /// <summary>
-    /// Informace o políčkách s překážkami.
-    /// </summary>
-    [JsonPropertyName("obstacles")]
-    public required CoordinateDto[] Obstacles { get; init; }
-    
-    /// <summary>
-    /// Informace o políčkách s ohněm (po detonaci bomby.).
+    /// Informace o políčkách s ohněm (po detonaci bomby nebo miny.).
     /// </summary>
     [JsonPropertyName("fire")]
     public required FireDto[] Fires { get; init; }
@@ -50,4 +44,10 @@ public record BoardDto
     /// </summary>
     [JsonPropertyName("bombers")]
     public required BomberDto[] Bombers { get; init; }
+
+    /// <summary>
+    /// Maximální intenzita ohně na hrací ploše.
+    /// </summary>
+    [JsonPropertyName("maximumFireIntensity")]
+    public required int MaximumFireIntensity { get; init; }
 }

@@ -1,4 +1,4 @@
-﻿using BsBomber.Contracts;
+using BsBomber.Contracts;
 using BsBomber.Core.Model;
 
 namespace BsBomber.Core.BomberEngines;
@@ -17,6 +17,17 @@ public class SimpleBomberEngine : IBomberEngine
     /// <inheritdoc />
     public Task<ResponseDto> MoveAsync(GameDto status, CancellationToken cancellationToken)
     {
+        switch (status.Iteration % 3)
+        {
+            case 1:
+                return Task.FromResult(new ResponseDto { BomberAction = BomberAction.GoDown });
+            case 2:
+                return Task.FromResult(new ResponseDto { BomberAction = BomberAction.GoRight });
+            case 0:
+                return Task.FromResult(new ResponseDto { BomberAction = BomberAction.PutBomb, Argument = 2 });
+        }
+
+        
         throw new NotImplementedException();
     }
 

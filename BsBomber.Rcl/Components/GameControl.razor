@@ -1,4 +1,4 @@
-﻿@using BsBomber.Contracts
+@using BsBomber.Contracts
 @using BsBomber.Core.Model
 
 @inject DialogService DialogService
@@ -7,7 +7,7 @@
     <RadzenColumn Size="7">
         <RadzenPanel Text="Hra">
             <div style="display: grid; justify-items: center; grid-gap: 1em;">
-                <BoardView Board="@GetCurrentHistoryGame().Board" />
+                <BoardView Board="@GetCurrentHistoryGame().Board" Game="Game" />
                 <div>
                     <RadzenButton Text="Spustit" Click="StartClicked" Disabled="_isRunning || Game.Completed" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Primary" />
                     <RadzenButton Text="Zastavit" Click="StopClicked" Disabled="!_isRunning || Game.Completed || Game.Iteration == 0" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Light" />

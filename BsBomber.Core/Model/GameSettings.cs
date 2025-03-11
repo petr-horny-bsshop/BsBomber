@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace BsBomber.Core.Model;
@@ -39,8 +39,8 @@ public record GameSettings
     /// <summary>
     /// Pravděpodobnost, že se v každé iteraci na volném políčku vytvoří jídlo.
     /// </summary>
-    [JsonPropertyName("foodProbability")]
-    public required double FoodProbability { get; init; }
+    [JsonPropertyName("mineCount")]
+    public required double MineCount { get; init; }
 
     /// <summary>
     /// Průměrný dovolený timeout v milisekundách.
@@ -63,16 +63,10 @@ public record GameSettings
     public int? MaximumIterations { get; init; }
 
     /// <summary>
-    /// Počáteční energie hráčů.
+    /// Intenzita ohně při výbuchu.
     /// </summary>
-    [JsonPropertyName("startingEnergy")]
-    public int StartingEnergy { get; init; }
-
-    /// <summary>
-    /// Energie, kterou hráč získá po konzumaci.
-    /// </summary>
-    [JsonPropertyName("energyIncrease")]
-    public int FoodEnergy { get; init; }
+    [JsonPropertyName("fireIntensity")]
+    public int FireIntensity { get; init; }
 
     /// <summary>
     /// Vytvoří výchozí sadu nastavení her.
@@ -84,10 +78,9 @@ public record GameSettings
             Name = "1. kolo",
             BoardWidth = 12,
             BoardHeight = 12,
-            FoodProbability = 0.3,
+            MineCount = 0.3,
             MaximumIterations = 250,
-            StartingEnergy = 100,
-            FoodEnergy = 10,
+            FireIntensity = 3,
 
             AverageTimeout = AVERAGE_TIMEOUT,
             MaximumTimeout = MAXIMUM_TIMEOUT
@@ -96,7 +89,7 @@ public record GameSettings
         var secondRound = firstRound with
         {
             Name = "2. kolo",
-            FoodProbability = 0.1,
+            MineCount = 0.1,
             MaximumIterations = 500,
         };
 

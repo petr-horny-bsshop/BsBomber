@@ -1,4 +1,4 @@
-﻿using BsBomber.Contracts;
+using BsBomber.Contracts;
 using System.Text.Json.Serialization;
 
 namespace BsBomber.Core.Model;
@@ -40,55 +40,41 @@ public record Bomb
     /// <summary>
     /// Odpálí bombu.
     /// </summary>
-    public void Detonate(Board board)
+    public void Detonate(Game game)
     {
+        var board = game.Board;
+        if (board.Fires.FirstOrDefault(f => f.Position.X == Position.X && f.Position.Y == Position.Y) is not null)
+        {
+            return;
+        }
+
         // vzdálenost exploze na každou stranu
-        const int explosionRange = 5;
-        
+        const int explosionRange = int.MaxValue / 2;
+
         // Exploze na pravou stranu
         for (var x = Position.X; x < Position.X + explosionRange; x++)
         {
-            // Je tam překážka, za kterou se exploze nedostane
-            if (board.Obstacles.Any(o => o.X == x && o.Y == Position.Y)) break;
-            
-            AddFire(x, Position.Y);
+            if (!game.TryAddFire(x, Position.Y, BomberId)) break;
         }
 
         // Exploze na levou stranu
         for (var x = Position.X; x > Position.X - explosionRange; x--)
         {
-            // Je tam překážka, za kterou se exploze nedostane
-            if (board.Obstacles.Any(o => o.X == x && o.Y == Position.Y)) break;
-
-            AddFire(x, Position.Y);
+            if (!game.TryAddFire(x, Position.Y, BomberId)) break;
         }
 
         // Exploze nahoru
         for (var y = Position.Y; y < Position.Y + explosionRange; y++)
         {
-            // Je tam překážka, za kterou se exploze nedostane
-            if (board.Obstacles.Any(o => o.X == Position.X && o.Y == y)) break;
-            AddFire(Position.X, y);
+            if (!game.TryAddFire(Position.X, y, BomberId)) break;
         }
 
         // Exploze dolů
         for (var y = Position.Y; y > Position.Y - explosionRange; y--)
         {
-            // Je tam překážka, za kterou se exploze nedostane
-            if (board.Obstacles.Any(o => o.X == Position.X && o.Y == y)) break;
-            AddFire(Position.X, y);
+            if (!game.TryAddFire(Position.X, y, BomberId)) break;
         }
 
-        return;    
-
-        void AddFire(int x, int y)
-        {
-            var fire = new Fire
-            {
-                BomberId = BomberId,
-                Position = new Coordinate(x, y)
-            };
-            board.Fires.Add(fire);
-        }
+        board.Bombs.Remove(this);
     }
 }

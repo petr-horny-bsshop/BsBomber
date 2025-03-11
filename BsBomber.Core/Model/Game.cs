@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using BsBomber.Contracts;
 using BsBomber.Core.BomberEngines;
 
@@ -22,6 +22,7 @@ public class Game
         "#000000",
         "#ff6000"
         };
+    internal readonly Lock _iterationLock = new();
 
     /// <summary>
     /// Hrací plocha.
@@ -45,8 +46,10 @@ public class Game
             var bomberDefinition = bombers[i];
             var bomber = new RemoteBomberEngine(bomberDefinition.Url);
             var bomberColor = _bomberColors[i % _bomberColors.Count];
-            Board.AddBomber(bomber, _settings.StartingEnergy, bomberDefinition.Name, bomberColor);
+            Board.AddBomber(bomber, bomberDefinition.Name, bomberColor);
         }
+
+        GenerateMines();
     }
 
     /// <summary>
@@ -76,7 +79,7 @@ public class Game
     {
         var gameDto = new GameDto
         {
-            Board = Board.GetDto(),
+            Board = Board.GetDto(_settings.FireIntensity),
             You = null!,
             Iteration = Iteration
         };
@@ -91,7 +94,7 @@ public class Game
         var gameDto = new GameDto
         {
             You = bomber.GetDto(),
-            Board = Board.GetDto(),
+            Board = Board.GetDto(_settings.FireIntensity),
             Iteration = Iteration
         };
         return gameDto;
@@ -119,12 +122,10 @@ public class Game
 
         await MoveBombersAsync();
 
-        // TODO upravit, aby se toto dělo v MoveBombersAsync, přednost bude mít ten, kdo byl rychlejší
+        ProcessFires();
         CheckCollisions();
-        CheckFood();
-        CheckBomberEnergy();
         DetonateBombs();
-        GenerateFood();
+        GenerateMines();
 
         var gameDto = GetDto();
         _iterationHistory.Add(gameDto);
@@ -142,6 +143,18 @@ public class Game
         }
 
         return anyBomberAlive;
+    }
+
+    private void ProcessFires()
+    {
+        foreach (var fire in Board.Fires.ToArray())
+        {
+            fire.Intensity--;
+            if (fire.Intensity == -1)
+            {
+                Board.Fires.Remove(fire);
+            }
+        }
     }
 
     private async Task InitBombersAsync()
@@ -207,16 +220,12 @@ public class Game
 
     private void DetonateBombs()
     {
-        // smažeme ohně od předchozích výbuchů
-        Board.Fires.Clear();
-
         // odpálíme bomby
         foreach (var bomb in Board.Bombs.ToArray())
         {
             if (bomb.Timer == 0)
             {
-                bomb.Detonate(Board);
-                Board.Bombs.Remove(bomb);
+                bomb.Detonate(this);
             }
             else
             {
@@ -232,72 +241,26 @@ public class Game
         // kolize hráčů s ohněm
         foreach (var bomber in aliveBombers)
         {
+            if (!bomber.Alive) continue;
+
             if (Board.Fires.Any(f => f.Position == bomber.Position))
             {
-                bomber.Kill("Kolize s explozí.", Iteration);
+                bomber.Kill("Kolize s ohněm.", Iteration);
+            }
+
+            if (Board.Mines.FirstOrDefault(f => f == bomber.Position) is { } mine)
+            {
+                mine.Detonate(this, bomber.Id);
             }
         }
     }
 
-    private void CheckFood()
+    private void GenerateMines()
     {
-        // Sebrání jídla hráčem.
-        foreach (var bomber in Board.AliveBombers)
+        while (Board.Mines.Count < _settings.MineCount)
         {
-            foreach (var food in Board.Food.ToArray())
-            {
-                if (bomber.Position == food)
-                {
-                    bomber.Eat(1, _settings.FoodEnergy);
-                    Board.Food.Remove(food);
-                }
-            }
+            if (!Board.TryAddMine()) return;
         }
-
-        // Sebrání jídla explozí.
-        foreach (var fire in Board.Fires)
-        {
-            foreach (var food in Board.Food.ToArray())
-            {
-                if (fire.Position == food)
-                {
-                    var bomber = Board.AliveBombers.FirstOrDefault(b => b.Id == fire.BomberId);
-                    if (bomber != null) bomber.Eat(1, _settings.FoodEnergy);
-                    Board.Food.Remove(food);
-                }
-            }
-        }
-    }
-
-    private void CheckBomberEnergy()
-    {
-        foreach (var bomber in Board.AliveBombers)
-        {
-            if (bomber.Energy <= 0)
-            {
-                bomber.Kill("Vyhladovění.", Iteration);
-            }
-        }
-    }
-
-    private void GenerateFood()
-    {
-        if (Random.Shared.NextDouble() < _settings.FoodProbability)
-        {
-            Board.AddFood();
-        }
-    }
-
-    private void InitObstacles()
-    {
-        for (var x = 1; x < _settings.BoardWidth - 1; x += 2)
-        {
-            for (var y = 1; y < _settings.BoardHeight - 1; y += 2)
-            {
-                Board.AddObstacle(new Coordinate(x, y));
-            }
-        }
-        
     }
 
     /// <summary>
@@ -316,5 +279,52 @@ public class Game
             };
             await bomber.SimulateMoveAsync(gameForBomberDto, CancellationToken.None);
         }
+    }
+
+    internal bool TryAddFire(int x, int y, string bomberId)
+    {
+        var coord = new Coordinate(x, y);
+        if (!IsOnBoard(coord)) return false;
+
+        if (Board.Fires.FirstOrDefault(f => f.Position == coord) is { } fire)
+        {
+            if (fire.Intensity < _settings.FireIntensity)
+            {
+                Board.Fires.Remove(fire);
+            }
+            else
+            {
+                return true;
+            }
+        }
+        fire = new Fire
+               {
+                   BomberId = bomberId,
+                   Position = new Coordinate(x, y),
+                   Intensity = _settings.FireIntensity
+               };
+        Board.Fires.Add(fire);
+
+        if (Board.Mines.FirstOrDefault(f => f == coord) is { } mine)
+        {
+            mine.Detonate(this, bomberId);
+        }
+
+        if (Board.Bombs.FirstOrDefault(f => f.Position == coord) is { } bomb2)
+        {
+            bomb2.Detonate(this);
+        }
+
+        if (Board.Bombers.FirstOrDefault(f => f.Position == coord) is { } bomber2)
+        {
+            bomber2.Kill("Zabit explozí", Iteration);
+        }
+
+        return true;
+    }
+
+    internal bool IsOnBoard(Coordinate coordinate)
+    {
+        return coordinate.X >= 0 && coordinate.X < Board.Width && coordinate.Y >= 0 && coordinate.Y < Board.Height;
     }
 }

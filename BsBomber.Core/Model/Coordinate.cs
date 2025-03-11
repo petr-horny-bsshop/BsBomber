@@ -1,4 +1,4 @@
-﻿using BsBomber.Contracts;
+using BsBomber.Contracts;
 
 namespace BsBomber.Core.Model;
 
@@ -34,6 +34,7 @@ public class Coordinate
         switch (bomberAction)
         {
             case BomberAction.None:
+            case BomberAction.PutBomb:
                 return new Coordinate(X, Y);
             case BomberAction.GoRight:
                 return new Coordinate(X + 1, Y);
@@ -42,14 +43,6 @@ public class Coordinate
             case BomberAction.GoUp:
                 return new Coordinate(X, Y + 1);
             case BomberAction.GoDown:
-                return new Coordinate(X, Y - 1);
-            case BomberAction.PutBombRight:
-                return new Coordinate(X + 1, Y);
-            case BomberAction.PutBombLeft:
-                return new Coordinate(X - 1, Y);
-            case BomberAction.PutBombUp:
-                return new Coordinate(X, Y + 1);
-            case BomberAction.PutBombDown:
                 return new Coordinate(X, Y - 1);
             default: throw new ArgumentOutOfRangeException(nameof(bomberAction), bomberAction, null);
         }

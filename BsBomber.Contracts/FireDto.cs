@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace BsBomber.Contracts;
 
@@ -18,4 +18,11 @@ public record FireDto
     /// </summary>
     [JsonPropertyName("bomberId")]
     public required string BomberId { get; init; }
+
+    /// <summary>
+    /// Intenzita ohně. S každou iterací se snižuje o 1. Pokud dosáhne 0, ohně nebude zraňovat, pouze zůstane chvíli vizuál (záporné hodnoty).
+    /// </summary>
+    [JsonPropertyName("intensity")]
+    public required int Intensity { get; init; }
+
 }

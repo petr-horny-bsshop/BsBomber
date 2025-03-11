@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace BsBomber.Contracts;
 
@@ -34,22 +34,7 @@ public enum BomberAction
     GoDown,
 
     /// <summary>
-    /// Umísti bombu vpravo.
+    /// Umísti bombu pod sebe.
     /// </summary>
-    PutBombRight,
-
-    /// <summary>
-    /// Umísti bombu vlevo.
-    /// </summary>
-    PutBombLeft,
-
-    /// <summary>
-    /// Umísti bombu nahoru.
-    /// </summary>
-    PutBombUp,
-
-    /// <summary>
-    /// Umísti bombu dolu.
-    /// </summary>
-    PutBombDown
+    PutBomb
 }

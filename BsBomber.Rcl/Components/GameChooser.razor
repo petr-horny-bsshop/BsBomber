@@ -1,4 +1,4 @@
-﻿@using BsBomber.Core.Model
+@using BsBomber.Core.Model
 <RadzenDropDown Data="_gameSettings" @bind-Value="Value" @bind-Value:after="AfterValueChanged" TextProperty="@nameof(GameSettings.Name)" />
 <br />
 <br />
@@ -7,9 +7,7 @@
 {
     <div>Název: @Value.Name</div>
     <div>Hrací plocha: @Value.BoardWidth x @Value.BoardHeight</div>
-    <div>Počáteční energie bomberů: @Value.StartingEnergy</div>
-    <div>Energie získaná z potravy: @Value.FoodEnergy</div>
-    <div>Pravděpodobnost vzniku potravy: @Value.FoodProbability.ToString("p0")</div>
+    <div>Pravděpodobnost vzniku potravy: @Value.MineCount.ToString("p0")</div>
     <div>Maximální počet iterací: @(Value.MaximumIterations.HasValue ? Value.MaximumIterations : "neomezeno")</div>
     <div>Průměrný povolený timeout: @Value.AverageTimeout ms</div>
     <div>Maximální povolený timeout: @Value.MaximumTimeout ms</div>

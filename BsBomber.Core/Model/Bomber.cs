@@ -1,4 +1,6 @@
-﻿using BsBomber.Contracts;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using BsBomber.Contracts;
 using BsBomber.Core.BomberEngines;
 
 namespace BsBomber.Core.Model;
@@ -33,9 +35,9 @@ public class Bomber
     public bool Alive { get; private set; } = true;
 
     /// <summary>
-    /// Energie hráče.
+    /// Skóre.
     /// </summary>
-    public int Energy { get; private set; }
+    public int Score { get; private set; }
 
     /// <summary>
     /// Příčina smrti hráče.
@@ -67,17 +69,15 @@ public class Bomber
     /// Vytvoří novou instanci hráče.
     /// </summary>
     /// <param name="positionPosition">Pozice hlavy.</param>
-    /// <param name="energy">Počáteční energie.</param>
     /// <param name="engine">Engine, který ovládá hráče.</param>
     /// <param name="name">Název hráče.</param>
     /// <param name="color">Html barva hráče.</param>
-    public Bomber(Coordinate positionPosition, int energy, IBomberEngine engine, string name, string color)
+    public Bomber(Coordinate positionPosition, IBomberEngine engine, string name, string color)
     {
         _engine = engine;
         Position = positionPosition;
         Color = color;
         Name = name;
-        Energy = energy;
     }
 
     /// <summary>
@@ -110,46 +110,37 @@ public class Bomber
 
         var response = await _engine.MoveAsync(gameDto, cancellationToken);
 
-        // Jedná se o pohyb
-        if (response.BomberAction.IsMovement())
+        var json = JsonSerializer.Serialize(response, new JsonSerializerOptions() { WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping });
+        lock (game._iterationLock)
         {
-            var newPosition = Position.Move(response.BomberAction);
-
-            // Na nové pozici je překážka, takže se nikam nejde
-            if (game.Board.Obstacles.Any(o => o == newPosition)) return;
-
-            // Na nové pozici je jiný hráč, takže se nikam nejde
-            if (game.Board.AliveBombers.Any(b => b.Position == newPosition)) return;
-
-            // Na nové pozici je bomba, takže se nikam nejde
-            if (game.Board.Bombs.Any(b => b.Position == newPosition)) return;
-
-            Position = newPosition;
-
-            Energy--;
-        }
-        else if (response.BomberAction.IsBombPlacing())
-        {
-            var newPosition = Position.Move(response.BomberAction);
-
-            // Na nové pozici je překážka, takže se nic pokládat nebude
-            if (game.Board.Obstacles.Any(o => o == newPosition)) return;
-
-            // Na nové pozici je jiný hráč, takže se nic pokládat nebude
-            if (game.Board.AliveBombers.Any(b => b.Position == newPosition)) return;
-
-            // Na nové pozici je bomba, takže se nic pokládat nebude
-            if (game.Board.Bombs.Any(b => b.Position == newPosition)) return;
-            
-            var bomb = new Bomb
+            // Jedná se o pohyb
+            if (response.BomberAction.IsMovement())
             {
-                BomberId = Id,
-                Position = newPosition,
-                Timer = response.Argument.GetValueOrDefault(3)
-            };
-            game.Board.Bombs.AddLast(bomb);
+                var newPosition = Position.Move(response.BomberAction);
+
+                // Nejde se na novou pozici, protože je mimo hrací plochu
+                if (!game.IsOnBoard(newPosition)) return;
+
+                // Na nové pozici je jiný hráč, takže se nikam nejde
+                if (game.Board.AliveBombers.Any(b => b.Position == newPosition)) return;
+
+                Position = newPosition;
+            }
+            else if (response.BomberAction.IsBombPlacing())
+            {
+                if (game.Board.Bombs.Any(b => b.Position == Position)) return;
+
+                var timer = response.Argument.GetValueOrDefault(3);
+                if (timer is < 2 or > 3) return;
+                var bomb = new Bomb
+                           {
+                               BomberId = Id,
+                               Position = Position,
+                               Timer = response.Argument.GetValueOrDefault(3)
+                           };
+                game.Board.Bombs.AddLast(bomb);
+            }
         }
-        
     }
 
     /// <summary>
@@ -163,13 +154,11 @@ public class Bomber
     }
 
     /// <summary>
-    /// Informuje hráče, že snědl jídlo se zadanou energií.
+    /// Přidá hráči skóre za zničenou minu.
     /// </summary>
-    /// <param name="count">Počet jídla, který hráč snědl.</param>
-    /// <param name="energy">Celková energie získaná snědením daného počtu jídla.</param>
-    public void Eat(int count, int energy)
+    public void AddScore(int count = 1)
     {
-        Energy += energy;
+        Score += count;
     }
 
     /// <summary>
@@ -183,7 +172,7 @@ public class Bomber
             Name = Name,
             Url = Url,
             Position = Position.GetDto(),
-            Energy = Energy,
+            Score = Score,
             Color = Color,
             Alive = Alive,
             DeathCause = DeathCause,
