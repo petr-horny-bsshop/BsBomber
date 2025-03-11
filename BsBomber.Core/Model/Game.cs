@@ -38,7 +38,7 @@ public class Game
         _settings = settings;
         Board = new Board(settings.BoardWidth, settings.BoardHeight);
         
-        InitObstacles();
+        // InitObstacles();
 
         for (var i = 0; i < bombers.Count; i++)
         {

@@ -17,7 +17,7 @@ public class SimpleBomberEngine : IBomberEngine
     /// <inheritdoc />
     public Task<ResponseDto> MoveAsync(GameDto status, CancellationToken cancellationToken)
     {
-        
+        throw new NotImplementedException();
     }
 
     

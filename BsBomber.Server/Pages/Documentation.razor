@@ -8,19 +8,27 @@
 </p>
 
 <h2>Základní pravidla/vlastnosti hry</h2>
-<ul>
-    <li>Pokud hlava hada narazí (pozice hlavy je stejná jako pozice jídla) na jídlo, bude v další iteraci o jeden článek delší a získá určité množství energie, které je dáno parametry hry.</li>
-    <li>Pokud hlava hada narazí na překážku (pozice hlavy je stejná jako pozice překážky), had zemře.</li>
-    <li>Pokud hlava hada narazí do svého těla nebo do těla jiného živého hada (pozice hlavy je stejná jako pozice libovolného článku hada), had zemře.</li>
-    <li>Pokud hlava hada narazí do hlavy jiného živého hada, zemřou oba dva hadi.</li>
-    <li>Do mrtvého hada není možné narazit.</li>
-    <li>V každé iteraci klesne energie hada o 1.</li>
-    <li>Pokud klesne energie hada na 0, had zemře.</li>
-    <li>Pokud had vyjede mimo hrací plochu, zemře.</li>
-    <li>Had bez těla se může pohybovat vždy všemi směry.</li>
-    <li>Pokud má had tělo a pohybuje se například doprava, nic nebrání tomu, aby v další iteraci změnil směr doleva. Pokud toto však udělá, tak zemře.</li>
-    <li>Had, který zemře se již neúčastní hry, tj. nejsou na něj odesílány další požadavky.</li>
-</ul>
+<pre>
+    1.	Nebudou překážky
+    2.	Místo jídla budou miny
+        a.	Pokud stoupnu na minu, tak exploduje a hráč zemře
+        b.	Miny půjdou odpálit pomocí bomb
+        c.	Pokud odpálím minu, dostanu bod
+        d.	Mina vytvoří oheň v okruhu 3x3
+        e.	Počet min na hrací ploše bude konstantní, jakmile se jedna odpálí, tak se náhodně objeví nová
+        f.	(Miny se budou pokládat náhodně tak, aby vzdálenost dvou min byla alespoň 2 políčka, tzn. jedna kostička mezera) – uvidíme jestli bude potřeba
+    3.	Dva hráči nemohou být na jednom políčku
+    4.	Hráč klade bombu na místo, kde stojí
+    5.	Nelze položit bombu na místo, kde už nějaká bomba je
+    6.	Mohu stoupnout na bombu, tj. bomba není překážka
+    7.	Mohu nastavit časovač bomby na 2 a 3 iterace
+    8.	Exploze bomby vytvoří oheň jehož paprsky míří horizontálně a vertikálně přes celou hrací plochu nehledě na překážkách (jiné bomby, hráči, miny).   Oheň hoří 3 iterace.
+    9.	Pokud se oheň dotkne hráče, tak hráč umře
+    10.	Pokud se oheň dotkne miny, tak mina exploduje
+    11.	Pokud se oheň dotkne bomby, bomba exploduje
+    12.	Pokud udělá hráč neplatný pohyb (akci), tak se pohyb neuskuteční
+
+</pre>
 
 
 
