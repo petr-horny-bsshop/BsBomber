@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace BsBomber.Contracts;
 
@@ -15,7 +15,7 @@ public record BombDto
 
     /// <summary>
     /// Počet iterací do výbuchu bomby.
-    /// Jakmile je hodnota 0, tak v příští iteraci bomba exploduje.
+    /// Jakmile je hodnota 1, tak v příští iteraci bomba exploduje.
     /// </summary>
     [JsonPropertyName("timer")]
     public required int Timer { get; init; }

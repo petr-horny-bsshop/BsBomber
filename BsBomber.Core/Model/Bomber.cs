@@ -1,5 +1,3 @@
-using System.Text.Encodings.Web;
-using System.Text.Json;
 using BsBomber.Contracts;
 using BsBomber.Core.BomberEngines;
 
@@ -110,7 +108,7 @@ public class Bomber
 
         var response = await _engine.MoveAsync(gameDto, cancellationToken);
 
-        var json = JsonSerializer.Serialize(response, new JsonSerializerOptions() { WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping });
+        //var json = JsonSerializer.Serialize(response, new JsonSerializerOptions() { WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping });
         lock (game._iterationLock)
         {
             // Jedná se o pohyb
@@ -136,8 +134,8 @@ public class Bomber
                            {
                                BomberId = Id,
                                Position = Position,
-                               Timer = response.Argument.GetValueOrDefault(3)
-                           };
+                               Timer = timer + 1 // přidáme +1 protože ještě v této iteraci u bomby proběhne ponížení timeru
+                };
                 game.Board.Bombs.AddLast(bomb);
             }
         }

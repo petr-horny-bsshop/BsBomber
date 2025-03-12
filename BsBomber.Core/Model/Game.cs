@@ -223,13 +223,10 @@ public class Game
         // odpálíme bomby
         foreach (var bomb in Board.Bombs.ToArray())
         {
+            bomb.Timer--;
             if (bomb.Timer == 0)
             {
                 bomb.Detonate(this);
-            }
-            else
-            {
-                bomb.Timer--;
             }
         }
     }

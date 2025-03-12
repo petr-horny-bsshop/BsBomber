@@ -15,7 +15,7 @@ public record Bomb
 
     /// <summary>
     /// Počet iterací do výbuchu bomby.
-    /// Jakmile je hodnota 0, tak v příští iteraci bomba exploduje.
+    /// Jakmile je hodnota 1, tak v příští iteraci bomba exploduje.
     /// </summary>
     public required int Timer { get; set; }
 
@@ -45,6 +45,7 @@ public record Bomb
         var board = game.Board;
         if (board.Fires.FirstOrDefault(f => f.Position.X == Position.X && f.Position.Y == Position.Y) is not null)
         {
+            board.Bombs.Remove(this);
             return;
         }
 

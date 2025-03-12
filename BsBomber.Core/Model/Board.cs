@@ -22,7 +22,7 @@ public class Board
     public int Height { get; }
 
     /// <summary>
-    /// Seznam pozic s potravou na hrací ploše.
+    /// Seznam pozic s minou na hrací ploše.
     /// </summary>
     public IList<Mine> Mines { get; } = new List<Mine>();
 
@@ -87,7 +87,7 @@ public class Board
     }
 
     /// <summary>
-    /// Přidá potravu na náhodně vybrané volné pole.
+    /// Přidá minu na náhodně vybrané volné pole.
     /// </summary>
     public bool TryAddMine()
     {
