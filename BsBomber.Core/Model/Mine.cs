@@ -11,6 +11,7 @@ public class Mine(int x, int y) : Coordinate(x, y)
     /// </summary>
     public void Detonate(Game game, string bomberId)
     {
+        game.TryAddFire(X, Y, bomberId);
         game.TryAddFire(X - 1, Y - 1, bomberId);
         game.TryAddFire(X, Y - 1, bomberId);
         game.TryAddFire(X + 1, Y - 1, bomberId);

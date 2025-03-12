@@ -2,9 +2,10 @@
 <h1>Dokumentace</h1>
 <h2>Základní princip hry</h2>
 <p>
-    Každý had funguje jako samostatný http server. V každé iteraci hry je na http server hada (dále jen hada) poslán POST request na adresu /move.
-    V POST datech je stav hry serializovaný do JSONu. Odpověď hada je směr (Up, Down, Left, Right), kterým se má v dané iteraci vydat.
-    Před začátkem hry, je na hada poslán POST request na adresu /init s počátečním stavem hry. Had odpovídá pouze stavovým kódem 200.
+    Každý bomber funguje jako samostatný http server. V každé iteraci hry je na http server bombera (dále jen bombera) poslán POST request na adresu /move.
+    V POST datech je stav hry serializovaný do JSONu. Odpověď bombara je směr (GoUp, GoDown, GoLeft, GoRight), kterým se má v dané iteraci vydat a nebo PutBomb, pokud chce položit bombu, či None pokud záměrně nechce provést žádnou akci.
+    Před začátkem hry, je na bombera poslán POST request na adresu /init s počátečním stavem hry. Bomber odpovídá pouze stavovým kódem 200.
+    Cílem hry je ve stanoveném čase (počtu iterací) nasbírat co největší skóre. Skóre se získává odpálením min. Bomber získává skóre za každou minu, kterou odpálí. Skóre se zvyšuje o 1 za každou odpálenou minu.
 </p>
 
 <h2>Základní pravidla/vlastnosti hry</h2>
@@ -47,7 +48,7 @@
         <li><em>Zastavit</em> - zastaví hru.</li>
         <li><em>Předchozí krok</em> - umožní zobrazit stav hry v předchozích iteracích.</li>
         <li><em>Následující krok</em> - provede další iteraci anebo se posune v historii směrem vpřed.</li>
-        <li><em>Opakovat request</em> - znovu odešle na všechny hady request se stavem hry v aktuálně zobrazené iteraci. Odpověď hada je však zahozena. Určeno k ladění hadů.</li>
+        <li><em>Opakovat request</em> - znovu odešle na všechny bombery request se stavem hry v aktuálně zobrazené iteraci. Odpověď bombera je však zahozena. Určeno k ladění bomberů.</li>
         <li><em>Nová hra</em> - ukončí aktuální hru.</li>
     </ul>
 </p>
@@ -60,12 +61,12 @@
             <ul>
                 <li><em>width (celé číslo)</em> - Šířka hrací plochy (počet kostiček).</li>
                 <li><em>height (celé číslo)</em> - Výška hrací plochy (počet kostiček).</li>
-                <li><em>food (pole objektů typu Coordinate)</em> - Informace o políčkách s jídlem. V každém prvku pole je souřadnice jednoho jídla. Pokud je na hrací ploše 5 kusů jídel, bude zde 5 prvků.</li>
-                <li><em>obstacles (pole souřadnic)</em> - Informace o políčkách s překážkami. V každém prvku pole je souřadnice jedné překážky. Pokud je na hrací ploše 5 překážek, bude zde 5 prvků.</li>
-                <li><em>bombers (pole objektů typu Bomber)</em> - Informace o všech hadech na hrací ploše. Jsou zde i hadi, kteří již zemřeli. Je zde i had aktuálního hráče.</li>
+                <li><em>mines (pole objektů typu Coordinate)</em> - Informace o políčkách s minou. V každém prvku pole je souřadnice jedné miny. Pokud je na hrací ploše 5 min, bude zde 5 prvků.</li>
+                <li><em>fires (pole objektů typu Fire)</em> - Informace o políčkách s ohněm. V každém prvku pole je souřadnice jednoho ohně a jeho intenzity. Pokud je na hrací ploše 5 ohňů, bude zde 5 prvků.</li>
+                <li><em>bombers (pole objektů typu Bomber)</em> - Informace o všech bomberech na hrací ploše. Jsou zde i bombeři, kteří již zemřeli. Je zde i bomber aktuálního hráče.</li>
             </ul>
         </li>
-        <li><em>you (objekt typu Bomber)</em> - Informace o hadu hráče.</li>
+        <li><em>you (objekt typu Bomber)</em> - Informace o bomberovi hráče.</li>
         <li><em>iteration (celé číslo)</em> - Aktuální iterace hry.</li>
     </ul>
 </ul>
@@ -76,20 +77,24 @@
     <li><em>y (celé číslo)</em> - Pozice y. Počítáno od 0.</li>
 </ul>
 
+<b>Struktura objektu Fire</b>
+<ul>
+    <li><em>Dědí z Coordinate</em></li>
+    <li><em>intensity (celé číslo)</em> - Intenzita ohně (počet iterací během kterých zabije bombera).</li>
+</ul>
+
 <b>Struktura objektu Bomber</b>
 <ul>
-    <li><em>id (řetězec)</em> - Jedinečný identifikátor hada v rámci hry.</li>
+    <li><em>id (řetězec)</em> - Jedinečný identifikátor bombera v rámci hry.</li>
     <li><em>name (řetězec)</em> - Název hry.</li>
-    <li><em>url (řetězec)</em> - Bázová url adresa http serveru hada.</li>
-    <li><em>head (objekt typu Coordinate)</em> - Pozice hlavy hada.</li>
-    <li><em>body (pole objektů typu Coordinate)</em> - Pozice jednotlivých článků těla kromě hlavy. Pořadí prvků v poli není nijak definováno, tzn. není zaručeno, že na 0. prvku bude pozice článku těla hned za hlavou.</li>
-    <li><em>length (celé číslo)</em> - Délka hada včetně hlavy. Had bez těla, tj. pouze s hlavou má délku 1.</li>
-    <li><em>energy (celé číslo)</em> - Energie hada. V každé iteraci se energie snižuje o 1.</li>
-    <li><em>alive (boolean)</em> - Zda je had naživu.</li>
-    <li><em>color (řetězec)</em> - Barva hada v html formátu.</li>
-    <li><em>latency (celé číslo)</em> - Průměrná latence hada. Pokud latence překročí určitou mez bude had zabit.</li>
-    <li><em>deathCause (řetězec)</em> - Příčina smrti hada.</li>
-    <li><em>deathIteration (nullable celé číslo)</em> - Iterace, ve které had zemřel.</li>
+    <li><em>url (řetězec)</em> - Bázová url adresa http serveru bombera.</li>
+    <li><em>position (objekt typu Coordinate)</em> - Pozice bombera.</li>
+    <li><em>alive (boolean)</em> - Zda je bomber naživu.</li>
+    <li><em>color (řetězec)</em> - Barva bombera v html formátu.</li>
+    <li><em>latency (celé číslo)</em> - Průměrná latence bombera. Pokud latence překročí určitou mez bude bomber zabit.</li>
+    <li><em>deathCause (řetězec)</em> - Příčina smrti bombera.</li>
+    <li><em>deathIteration (nullable celé číslo)</em> - Iterace, ve které bomber zemřel.</li>
+    <li><em>score (celé číslo)</em> - Aktuální skóre bombera.</li>
 </ul>
 
 <h2>Ukázka JSON požadavku</h2>
