@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BsBomber.Rcl", "BsBomber.Rc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BsBomber.Server", "BsBomber.Server\BsBomber.Server.csproj", "{08AF0C62-F496-B98B-CD52-DB551DA4A5C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BsBomber.BomberExample", "BsBomber.BomberExample\BsBomber.BomberExample.csproj", "{C355979F-FEE9-F132-0BCB-CF27F72291BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{08AF0C62-F496-B98B-CD52-DB551DA4A5C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08AF0C62-F496-B98B-CD52-DB551DA4A5C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08AF0C62-F496-B98B-CD52-DB551DA4A5C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C355979F-FEE9-F132-0BCB-CF27F72291BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C355979F-FEE9-F132-0BCB-CF27F72291BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C355979F-FEE9-F132-0BCB-CF27F72291BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C355979F-FEE9-F132-0BCB-CF27F72291BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

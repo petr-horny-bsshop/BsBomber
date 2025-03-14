@@ -6,5 +6,9 @@
   {
     "name": "Ukázkový bomber #2",
     "url": "http://localhost:6001/bomber/0"
+  },
+  {
+    "name": "Ukázkový remote bomber #3",
+    "url": "http://localhost:6002/"
   }  
 ]

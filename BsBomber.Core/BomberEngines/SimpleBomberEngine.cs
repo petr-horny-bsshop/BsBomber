@@ -24,7 +24,9 @@ public class SimpleBomberEngine : IBomberEngine
             case 2:
                 return Task.FromResult(new ResponseDto { BomberAction = BomberAction.GoRight });
             case 0:
-                return Task.FromResult(new ResponseDto { BomberAction = BomberAction.PutBomb, Argument = 2 });
+                
+            //return Task.FromResult(new ResponseDto { BomberAction = BomberAction.None});
+            return Task.FromResult(new ResponseDto { BomberAction = BomberAction.PutBomb, Argument = 3 });
         }
 
         

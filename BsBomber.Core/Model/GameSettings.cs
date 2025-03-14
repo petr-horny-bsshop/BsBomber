@@ -37,7 +37,7 @@ public record GameSettings
     public required int BoardHeight { get; init; }
 
     /// <summary>
-    /// Pravděpodobnost, že se v každé iteraci na volném políčku vytvoří jídlo.
+    /// Počet min na hrací ploše.
     /// </summary>
     [JsonPropertyName("mineCount")]
     public required double MineCount { get; init; }
@@ -63,7 +63,7 @@ public record GameSettings
     public int? MaximumIterations { get; init; }
 
     /// <summary>
-    /// Intenzita ohně při výbuchu.
+    /// Intenzita ohně při výbuchu. S každou iterací se snižuje o 1. Pokud dosáhne 0, oheň nebude zraňovat, pouze zůstane chvíli vizuál (záporné hodnoty).
     /// </summary>
     [JsonPropertyName("fireIntensity")]
     public int FireIntensity { get; init; }

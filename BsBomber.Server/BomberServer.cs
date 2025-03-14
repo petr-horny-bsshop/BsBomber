@@ -1,3 +1,5 @@
+using System.Text.Encodings.Web;
+using System.Text.Json;
 using BsBomber.Contracts;
 using BsBomber.Core.BomberEngines;
 using BsBomber.Core.Model;
@@ -24,8 +26,8 @@ internal class BomberServer
 
         app.MapPost($"/bomber/{id}/move", async (GameDto game) =>
         {
+            var json = JsonSerializer.Serialize(game, new JsonSerializerOptions() { WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping });
             var result = await _bomberEngine.MoveAsync(game, CancellationToken.None);
-            // var json = JsonSerializer.Serialize(game, new JsonSerializerOptions() { WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping });
             return Results.Ok(result);
         }); 
     }

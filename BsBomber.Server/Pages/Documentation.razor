@@ -3,34 +3,37 @@
 <h2>Základní princip hry</h2>
 <p>
     Každý bomber funguje jako samostatný http server. V každé iteraci hry je na http server bombera (dále jen bombera) poslán POST request na adresu /move.
-    V POST datech je stav hry serializovaný do JSONu. Odpověď bombara je směr (GoUp, GoDown, GoLeft, GoRight), kterým se má v dané iteraci vydat a nebo PutBomb, pokud chce položit bombu, či None pokud záměrně nechce provést žádnou akci.
+    V POST datech je stav hry serializovaný do JSONu. Odpověď bombera je směr (GoUp, GoDown, GoLeft, GoRight), kterým se má v dané iteraci vydat a nebo PutBomb, pokud chce položit bombu, či None pokud záměrně nechce provést žádnou akci.
     Před začátkem hry, je na bombera poslán POST request na adresu /init s počátečním stavem hry. Bomber odpovídá pouze stavovým kódem 200.
     Cílem hry je ve stanoveném čase (počtu iterací) nasbírat co největší skóre. Skóre se získává odpálením min. Bomber získává skóre za každou minu, kterou odpálí. Skóre se zvyšuje o 1 za každou odpálenou minu.
 </p>
 
 <h2>Základní pravidla/vlastnosti hry</h2>
 <pre>
-    1.	Nebudou překážky
-    2.	Místo jídla budou miny
-        a.	Pokud stoupnu na minu, tak exploduje a hráč zemře
-        b.	Miny půjdou odpálit pomocí bomb
-        c.	Pokud odpálím minu, dostanu bod
-        d.	Mina vytvoří oheň v okruhu 3x3
-        e.	Počet min na hrací ploše bude konstantní, jakmile se jedna odpálí, tak se náhodně objeví nová
-        f.	(Miny se budou pokládat náhodně tak, aby vzdálenost dvou min byla alespoň 2 políčka, tzn. jedna kostička mezera) – uvidíme jestli bude potřeba
-    3.	Dva hráči nemohou být na jednom políčku
-    4.	Hráč klade bombu na místo, kde stojí
-    5.	Nelze položit bombu na místo, kde už nějaká bomba je
-    6.	Mohu stoupnout na bombu, tj. bomba není překážka
-    7.	Mohu nastavit časovač bomby na 2 a 3 iterace
-    8.	Exploze bomby vytvoří oheň jehož paprsky míří horizontálně a vertikálně přes celou hrací plochu nehledě na překážkách (jiné bomby, hráči, miny).   Oheň hoří 3 iterace.
-    9.	Pokud se oheň dotkne hráče, tak hráč umře
-    10.	Pokud se oheň dotkne miny, tak mina exploduje
-    11.	Pokud se oheň dotkne bomby, bomba exploduje
-    12.	Pokud udělá hráč neplatný pohyb (akci), tak se pohyb neuskuteční
+    1.	Hráč odpaluje miny a tím získává body
+        a. Pokud hráč stoupne na minu, tak mina exploduje a hráč zemře
+        b. Miny lze odpálit pomocí bomby, kterou hráč položí
+        c. Pokud hráč odpálí minu, dostane bod
+        d. Mina vytvoří oheň v okruhu 3x3
+        e. Počet min na hrací ploše je konstantní, jakmile se jedna odpálí, tak se náhodně objeví nová
+        f. Pokud v jedné iteraci dva hráči odpálí minu, bod dostane hráč jehož response přijde jako první
+        
+    2.	Dva hráči nemohou být na jednom políčku
+        a. Pokud se v jedné iteraci dva hráči pokusí přejít na stejné pole, tak pouze hráč jehož response přijde jako první na toto pole přejde, druhý hráč zůstane stát
+
+    3.	Hráč klade bombu na místo, kde stojí
+    4.	Nelze položit bombu na místo, kde už nějaká bomba je
+    5.	Hráč může stoupnout na bombu, tj. bomba není překážka
+    6.	Při pokládání bomby lze nastavit časovač na 2 nebo 3 iterace
+    7.	Exploze bomby vytvoří oheň jehož paprsky míří horizontálně a vertikálně přes celou hrací plochu nehledě na překážkách (jiné bomby, hráči, miny). 
+        a. Oheň hoří několik iterací, ale pouze první 3 iterace jsou smrtelné.
+
+    8.	Pokud se oheň dotkne hráče, tak hráč umře
+    9.	Pokud se oheň dotkne miny, tak mina exploduje
+    10.	Pokud se oheň dotkne bomby, bomba exploduje
+    11.	Pokud udělá hráč neplatný pohyb (akci), tak se pohyb neuskuteční
 
 </pre>
-
 
 
 <h2>Hrací plocha</h2>
@@ -106,55 +109,95 @@
     "width": 11,
     "mines": [
       {
-        "x": 8,
-        "y": 10
+        "x": 3,
+        "y": 5
       },
       {
-        "x": 5,
-        "y": 2
+        "x": 4,
+        "y": 5
       },
       {
         "x": 3,
         "y": 1
       }
     ],
-    "fire": [],
+    "fire": [
+      {
+        "position": {
+          "x": 8,
+          "y": 4
+        },
+        "bomberId": "3a851fc9-599b-4081-aeae-a6c65a7a89fa",
+        "intensity": 3
+      },
+      {
+        "position": {
+          "x": 9,
+          "y": 4
+        },
+        "bomberId": "3a851fc9-599b-4081-aeae-a6c65a7a89fa",
+        "intensity": 3
+      },
+      {
+        "position": {
+          "x": 8,
+          "y": 3
+        },
+        "bomberId": "3a851fc9-599b-4081-aeae-a6c65a7a89fa",
+        "intensity": 3
+      },
+    ],
     "bombs": [],
     "bombers": [
       {
-        "id": "3d25ffd9-7adf-4e3e-be58-ad72f7da9af0",
+        "id": "3a851fc9-599b-4081-aeae-a6c65a7a89fa",
         "name": "Ukázkový bomber #1",
         "url": "http://localhost:6001/bomber/1",
         "position": {
-          "x": 5,
-          "y": 9
+          "x": 9,
+          "y": 3
+        },
+        "score": 1,
+        "alive": false,
+        "color": "#ff0000",
+        "latency": 670,
+        "deathCause": "Zabit explozí",
+        "deathIteration": 6
+      },
+      {
+        "id": "166cfdd7-f898-41ba-ae87-9f802ba5a9c9",
+        "name": "Ukázkový bomber #2",
+        "url": "http://localhost:6001/bomber/0",
+        "position": {
+          "x": 10,
+          "y": 8
         },
         "score": 0,
-        "alive": true,
-        "color": "#ff0000",
-        "latency": 1940,
-        "deathCause": null,
-        "deathIteration": null
+        "alive": false,
+        "color": "#00ff00",
+        "latency": 670,
+        "deathCause": "Zabit explozí",
+        "deathIteration": 6
       }
     ],
     "maximumFireIntensity": 3
   },
   "you": {
-    "id": "3d25ffd9-7adf-4e3e-be58-ad72f7da9af0",
+    "id": "3a851fc9-599b-4081-aeae-a6c65a7a89fa",
     "name": "Ukázkový bomber #1",
     "url": "http://localhost:6001/bomber/1",
     "position": {
-      "x": 5,
-      "y": 9
+      "x": 9,
+      "y": 3
     },
-    "score": 0,
-    "alive": true,
+    "score": 1,
+    "alive": false,
     "color": "#ff0000",
-    "latency": 1940,
-    "deathCause": null,
-    "deathIteration": null
+    "latency": 670,
+    "deathCause": "Zabit explozí",
+    "deathIteration": 6
   },
-  "iteration": 3
+  "iteration": 6
 }
 </code>
 </pre>

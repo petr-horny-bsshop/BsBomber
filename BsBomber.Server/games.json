@@ -3,7 +3,7 @@
     "name": "1. kolo",
     "boardWidth": 11,
     "boardHeight": 11,
-    "mineCount": 3,
+    "mineCount": 1,
     "averageTimeout": 1000,
     "maximumTimeout": 10000,
     "maximumIterations": 250,
