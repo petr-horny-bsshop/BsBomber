@@ -186,18 +186,21 @@ public class Game
     {
         var tasks = new List<Task>();
         
-        var sw = Stopwatch.StartNew();
-
-        foreach (var bomber in Board.AliveBombers)
+        // Před každým kolem zamícháme pořadí hráčů.
+        // Ten kdo začíná má výhodu.
+        // Požadavky se sice posílají paralelně, ale i tak není jisté, že reálně neodejdou sekvenčně.
+        var randomOrderedBombers = Board.Bombers.OrderBy(_ => Random.Shared.Next());
+        
+        foreach (var bomber in randomOrderedBombers)
         {
+            if (!bomber.Alive) continue;
+
             using var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(_settings.MaximumTimeout ?? 10_000));
             
             var task = bomber.MoveAsync(this, cts.Token);
             
             task = task.ContinueWith(t =>
             {
-                bomber.AddResponseTime(sw.Elapsed);
-
                 if (t.IsFaulted)
                 {
                     bomber.Kill($"Chyba: {t.Exception?.GetBaseException()?.Message}", Iteration);

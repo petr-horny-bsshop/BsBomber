@@ -1,5 +1,7 @@
+using System.Diagnostics;
 using BsBomber.Contracts;
 using BsBomber.Core.BomberEngines;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BsBomber.Core.Model;
 
@@ -106,7 +108,11 @@ public class Bomber
     {
         var gameDto = game.GetDto(this);
 
+        var sw = Stopwatch.StartNew();
+        
         var response = await _engine.MoveAsync(gameDto, cancellationToken);
+        
+        AddResponseTime(sw.Elapsed);
 
         //var json = JsonSerializer.Serialize(response, new JsonSerializerOptions() { WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping });
         lock (game._iterationLock)
