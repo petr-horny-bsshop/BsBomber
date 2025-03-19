@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BsBomber.Server", "BsBomber
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BsBomber.BomberExample", "BsBomber.BomberExample\BsBomber.BomberExample.csproj", "{C355979F-FEE9-F132-0BCB-CF27F72291BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SenkyrBomber", "SenkyrBomber\SenkyrBomber.csproj", "{DC4F0C88-D53E-48F8-A0CE-D6012F8152C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{C355979F-FEE9-F132-0BCB-CF27F72291BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C355979F-FEE9-F132-0BCB-CF27F72291BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C355979F-FEE9-F132-0BCB-CF27F72291BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC4F0C88-D53E-48F8-A0CE-D6012F8152C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC4F0C88-D53E-48F8-A0CE-D6012F8152C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC4F0C88-D53E-48F8-A0CE-D6012F8152C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC4F0C88-D53E-48F8-A0CE-D6012F8152C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
