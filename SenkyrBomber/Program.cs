@@ -19,7 +19,7 @@ namespace SenkyrBomber
             WebApplication app = WebApplication.Create(args);
 
             app.Map($"/move",
-                (Game game) => Results.Ok(JsonSerializer.Serialize(bomber.Move(game))));
+                (Game game) => Results.Ok(bomber.Move(game)));
             app.Map($"/init",
                 (Game game) => Results.Ok(bomber.Init(game)));
             app.MapGet($"/",

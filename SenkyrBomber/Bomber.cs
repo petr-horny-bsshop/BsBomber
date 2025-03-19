@@ -45,12 +45,12 @@ namespace SenkyrBomber
                 SEM UMISTUJTE SVUJ KOD
             */
 
-            // pro ukazku se vraci nahodny smer pohybu
+            // pro ukazku se vraci nahodny pohyb (bez pokladani bomby)
             BomberAction[] actions = (BomberAction[])Enum.GetValues(typeof(BomberAction));
-            BomberAction randomAction = actions[(new Random()).Next(actions.Length - 2) + 1];
+            BomberAction randomAction = actions[new Random().Next(actions.Length - 1)];
 
-            Response response = new Response() { BomberAction = randomAction, Argument = null };
-            Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(response));
+            Response response = new Response() { BomberAction = randomAction };
+            
             return response;
         }
     }
