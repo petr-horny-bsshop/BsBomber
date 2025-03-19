@@ -87,6 +87,8 @@ public class Bomber
     /// <param name="iteration">Iterace, ve které došlo ke smrti hráče.</param>
     public void Kill(string cause, int iteration)
     {
+        if (!Alive) return;
+        
         Alive = false;
         DeathCause = cause;
         DeathIteration = iteration;
