@@ -20,7 +20,7 @@ namespace BsBomber.BomberExample
             app.MapPost("/move", async (GameDto game) =>
             {
                 var response = await bomberEngine.MoveAsync(game, CancellationToken.None);
-
+                Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(response));
                 return Results.Ok(response);
             }); 
 

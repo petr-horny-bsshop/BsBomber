@@ -22,7 +22,7 @@ public class Game
         "#000000",
         "#ff6000"
         };
-    internal readonly Lock _iterationLock = new();
+    internal readonly object _iterationLock = new();
 
     /// <summary>
     /// Hrací plocha.
