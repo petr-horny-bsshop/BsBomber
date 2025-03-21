@@ -43,6 +43,18 @@ public record GameSettings
     public required double MineCount { get; init; }
 
     /// <summary>
+    /// Počet min, které se přidají na hrací plochu každých <see cref="MineIncrementIterations"/> iterací.
+    /// </summary>
+    [JsonPropertyName("mineIncrement")]
+    public required double MineIncrement { get; init; }
+
+    /// <summary>
+    /// Počet iterací po kterých se navýší počet min.
+    /// </summary>
+    [JsonPropertyName("mineIncrementIterations")]
+    public required double MineIncrementIterations { get; init; }
+
+    /// <summary>
     /// Průměrný dovolený timeout v milisekundách.
     /// Pokud je NULL použije se výchozí hodnota <see cref="AVERAGE_TIMEOUT"/>.
     /// </summary>
@@ -81,6 +93,8 @@ public record GameSettings
             MineCount = 0.3,
             MaximumIterations = 250,
             FireIntensity = 3,
+            MineIncrement = 0,
+            MineIncrementIterations = 0,
 
             AverageTimeout = AVERAGE_TIMEOUT,
             MaximumTimeout = MAXIMUM_TIMEOUT

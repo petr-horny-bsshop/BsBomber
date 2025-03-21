@@ -257,7 +257,8 @@ public class Game
 
     private void GenerateMines()
     {
-        while (Board.Mines.Count < _settings.MineCount)
+        var additionalMineCount = (int)(Iteration / _settings.MineIncrementIterations) * _settings.MineIncrement;
+        while (Board.Mines.Count < (_settings.MineCount + additionalMineCount))
         {
             if (!Board.TryAddMine()) return;
         }
