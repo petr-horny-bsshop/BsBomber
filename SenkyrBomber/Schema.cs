@@ -17,34 +17,34 @@ namespace SenkyrBomber
     public partial class Bomber
     {
         [JsonPropertyName("id")]
-        public /* required */ string Id { get; init; }
+        public string? Id { get; init; }
 
         [JsonPropertyName("name")]
-        public /* required */ string Name { get; init; }
+        public string? Name { get; init; }
 
         [JsonPropertyName("url")] 
         public string? Url { get; init; }
 
         [JsonPropertyName("position")]
-        public /* required */ Coordinate Position { get; init; }
+        public Coordinate? Position { get; init; }
 
         [JsonPropertyName("score")]
-        public /* required */ int Score { get; init; }
+        public int Score { get; init; }
 
         [JsonPropertyName("alive")]
-        public /* required */ bool Alive { get; init; }
+        public bool Alive { get; init; }
 
         [JsonPropertyName("color")]
-        public /* required */ string Color { get; init; }
+        public string? Color { get; init; }
 
         [JsonPropertyName("latency")]
-        public /* required */ int Latency { get; init; }
+        public int Latency { get; init; }
 
         [JsonPropertyName("deathCause")]
-        public /* required */ string? DeathCause { get; init; }
+        public string? DeathCause { get; init; }
 
         [JsonPropertyName("deathIteration")]
-        public /* required */ int? DeathIteration { get; init; }
+        public int? DeathIteration { get; init; }
     }
 
     public class Bomb
