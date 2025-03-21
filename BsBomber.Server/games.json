@@ -3,30 +3,24 @@
     "name": "1. kolo",
     "boardWidth": 11,
     "boardHeight": 11,
-    "mineCount": 1,
+    "mineCount": 5,
+    "mineIncrement": 2,
+    "mineIncrementIterations": 100,
     "averageTimeout": 1000,
     "maximumTimeout": 10000,
-    "maximumIterations": 250,
+    "maximumIterations": 500,
     "fireIntensity": 3
   },
   {
     "name": "2. kolo",
-    "boardWidth": 13,
-    "boardHeight": 13,
-    "mineCount": 1,
-    "averageTimeout": 1000,
-    "maximumTimeout": 10000,
-    "maximumIterations": 1000,
-    "fireIntensity": 3
-  },
-  {
-    "name": "3. kolo",
     "boardWidth": 25,
     "boardHeight": 25,
-    "mineCount": 5,
+    "mineCount": 1,
+    "mineIncrement": 2,
+    "mineIncrementIterations": 100,
     "averageTimeout": 1000,
     "maximumTimeout": 10000,
-    "maximumIterations": 5000,
+    "maximumIterations": 500,
     "fireIntensity": 3
   }
 ]

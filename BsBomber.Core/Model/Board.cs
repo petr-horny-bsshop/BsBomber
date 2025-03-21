@@ -113,7 +113,18 @@ public class Board
             var x = Random.Shared.Next(0, Width);
             var y = Random.Shared.Next(0, Height);
             coordinate = new Coordinate(x, y);
-            if (IsCellFree(coordinate)) return true;
+            if (!IsCellFree(coordinate)) continue;
+            if (!IsCellFree(coordinate.Translate(-1,-1))) continue;
+            if (!IsCellFree(coordinate.Translate(-1,0))) continue;
+            if (!IsCellFree(coordinate.Translate(-1,1))) continue;
+            if (!IsCellFree(coordinate.Translate(0,-1))) continue;
+            if (!IsCellFree(coordinate.Translate(0,0))) continue;
+            if (!IsCellFree(coordinate.Translate(0,1))) continue;
+            if (!IsCellFree(coordinate.Translate(1,-1))) continue;
+            if (!IsCellFree(coordinate.Translate(1,0))) continue;
+            if (!IsCellFree(coordinate.Translate(1,1))) continue;
+            
+            return true;
         }
 
         coordinate = default;

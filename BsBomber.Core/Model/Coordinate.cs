@@ -49,6 +49,17 @@ public class Coordinate
     }
 
     /// <summary>
+    /// Posune souřadnici o zadaný počet bodů.
+    /// </summary>
+    /// <param name="dx">Delta X.</param>
+    /// <param name="dy">Delta Y.</param>
+    public Coordinate Translate(int dx, int dy)
+    {
+        var result = new Coordinate(X + dx, Y + dy);
+        return result;
+    }
+
+    /// <summary>
     /// Vrátí DTO objekt souřadnice.
     /// </summary>
     public CoordinateDto GetDto()
