@@ -20,9 +20,11 @@ public class Mine(int x, int y) : Coordinate(x, y)
         game.TryAddFire(X, Y + 1, bomberId);
         game.TryAddFire(X + 1, Y + 1, bomberId);
         game.TryAddFire(X + 1, Y, bomberId);
-        game.Board.Mines.Remove(this);
 
-        var bomber = game.Board.Bombers.First(b => b.Id == bomberId);
-        bomber.AddScore();
+        if (game.Board.Mines.Remove(this))
+        {
+            var bomber = game.Board.Bombers.First(b => b.Id == bomberId);
+            bomber.AddScore();
+        }
     }
 }

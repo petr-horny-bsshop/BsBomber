@@ -43,9 +43,8 @@ public record Bomb
     public void Detonate(Game game)
     {
         var board = game.Board;
-        if (board.Fires.FirstOrDefault(f => f.Position.X == Position.X && f.Position.Y == Position.Y) is not null)
+        if (!board.Bombs.Remove(this))
         {
-            board.Bombs.Remove(this);
             return;
         }
 
@@ -75,7 +74,5 @@ public record Bomb
         {
             if (!game.TryAddFire(Position.X, y, BomberId)) break;
         }
-
-        board.Bombs.Remove(this);
     }
 }
